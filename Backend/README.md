@@ -268,4 +268,119 @@ or
 }
 ```
 
+---
+
+# Captain Login Endpoint
+
+## Endpoint
+`POST /captains/login`
+
+## Description
+This endpoint is used to authenticate a captain. It validates the input data, checks the captain's credentials, and returns a JSON Web Token (JWT) along with the captain data if the credentials are valid.
+
+## Request Body
+```json
+{
+  "email": "alice.smith@example.com",
+  "password": "securepass"
+}
+```
+
+## Success Response
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "Alice",
+      "lastname": "Smith"
+    },
+    "email": "alice.smith@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+## Error Responses
+- **400 Bad Request** (validation errors)
+- **401 Unauthorized** (invalid credentials)
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+---
+
+# Get Captain Profile Endpoint
+
+## Endpoint
+`GET /captains/profile`
+
+## Description
+Returns the authenticated captain's profile information. Requires a valid JWT token in the `Authorization` header or as a cookie.
+
+## Headers
+- `Authorization: Bearer <token>` (or cookie named `token`)
+
+## Success Response
+```json
+{
+  "_id": "captain_id_here",
+  "fullname": {
+    "firstname": "Alice",
+    "lastname": "Smith"
+  },
+  "email": "alice.smith@example.com",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+## Error Response
+- **401 Unauthorized**
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
+---
+
+# Captain Logout Endpoint
+
+## Endpoint
+`GET /captains/logout`
+
+## Description
+Logs out the authenticated captain by blacklisting the current JWT token and clearing the authentication cookie.
+
+## Headers
+- `Authorization: Bearer <token>` (or cookie named `token`)
+
+## Success Response
+```json
+{
+  "message": "Logged out successfully"
+}
+```
+
+## Error Response
+- **401 Unauthorized**
+```json
+{
+  "message": "Unauthorized"
+}
+```
+
 
