@@ -171,3 +171,101 @@ Logs out the authenticated user by blacklisting the current JWT token and cleari
 }
 ```
 
+---
+
+# Captain Registration Endpoint
+
+## Endpoint
+`POST /captains/register`
+
+## Description
+This endpoint is used to register a new captain. It validates the input data, hashes the password, creates a new captain in the database, and returns a JSON Web Token (JWT) along with the captain data.
+
+## Request Body
+The request body should be a JSON object with the following fields:
+
+- `fullname`: An object containing:
+  - `firstname`: A string with a minimum length of 3 characters (required).
+  - `lastname`: A string with a minimum length of 3 characters (required).
+- `email`: A valid email address (required).
+- `password`: A string with a minimum length of 6 characters (required).
+- `vehicle`: An object containing:
+  - `color`: A string with a minimum length of 3 characters (required).
+  - `plate`: A string with a minimum length of 3 characters (required).
+  - `capacity`: An integer, minimum value 1 (required).
+  - `vehicleType`: Must be one of `"car"`, `"motorcycle"`, or `"auto"` (required).
+
+Example:
+```json
+{
+  "fullname": {
+    "firstname": "Alice",
+    "lastname": "Smith"
+  },
+  "email": "alice.smith@example.com",
+  "password": "securepass",
+  "vehicle": {
+    "color": "Red",
+    "plate": "XYZ123",
+    "capacity": 4,
+    "vehicleType": "car"
+  }
+}
+```
+
+## Success Response
+```json
+{
+  "token": "jwt_token_here",
+  "captain": {
+    "_id": "captain_id_here",
+    "fullname": {
+      "firstname": "Alice",
+      "lastname": "Smith"
+    },
+    "email": "alice.smith@example.com",
+    "vehicle": {
+      "color": "Red",
+      "plate": "XYZ123",
+      "capacity": 4,
+      "vehicleType": "car"
+    }
+  }
+}
+```
+
+## Error Responses
+
+- **400 Bad Request** (validation errors or if captain already exists)
+```json
+{
+  "errors": [
+    {
+      "msg": "First name must be at least 3 characters long",
+      "param": "fullname.firstname",
+      "location": "body"
+    },
+    {
+      "msg": "Invalid email",
+      "param": "email",
+      "location": "body"
+    }
+    // ...other validation errors
+  ]
+}
+```
+or
+```json
+{
+  "message": "Captain already exists"
+}
+```
+
+- **500 Internal Server Error**
+```json
+{
+  "error": "Error message here"
+}
+```
+
+

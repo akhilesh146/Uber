@@ -1,5 +1,5 @@
 const express = require('express');
-const rotuer = express.Router();
+const router = express.Router();
 const {body} = require('express-validator');
 const captainController = require('../controllers/captain.controller');
 
